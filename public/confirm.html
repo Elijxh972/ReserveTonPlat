@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de compte</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f4f4; }
+        .box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: inline-block; }
+        h1 { color: #333; }
+        a { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #1976d2; color: white; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1 id="title">Confirmation</h1>
+        <p id="message"></p>
+        <a id="loginLink" href="login.php" style="display:none;">Se connecter</a>
+    </div>
+
+    <script>
+    const params = new URLSearchParams(location.search);
+    const status = params.get('status') || 'error';
+    const message = params.get('message') || '';
+
+    document.getElementById('message').textContent = message;
+    document.getElementById('title').textContent = status === 'success' ? 'Succès !' : 'Erreur';
+    if (status === 'success') {
+        document.getElementById('title').style.color = '#2e7d32';
+        document.getElementById('loginLink').style.display = 'inline-block';
+    } else {
+        document.getElementById('title').style.color = '#d32f2f';
+    }
+
+    if (message) alert(message);
+    </script>
+</body>
+</html>

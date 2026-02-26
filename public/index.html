@@ -1,8 +1,3 @@
-<?php 
-// On inclut la connexion à la base de données pour vérifier que tout fonctionne
-include('../config/db.php'); 
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -23,15 +18,11 @@ include('../config/db.php');
     <div class="container">
         <h1>🍴 RéserveTonPlat</h1>
         <p>Bienvenue sur le système de réservation du CROUS Schœlcher.</p>
-        
-        <?php if($pdo): ?>
-            <p style="color: green; font-size: 0.8em;">✅ Serveur de base de données connecté</p>
-        <?php endif; ?>
 
         <hr>
 
         <a href="login.php" class="btn btn-login">Se connecter</a>
-        <a href="register.php" class="btn btn-register">S'inscrire</a>
+        <a href="register.html" class="btn btn-register">S'inscrire</a>
         
         <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
             Accès réservé aux emails @univ-antilles.fr

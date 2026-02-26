@@ -1,6 +1,17 @@
+:root {
+    /* Couleurs principales */
+    --primary-blue: #005596;  /* Le bleu du logo */
+    --vibrant-green: #2E7D32; /* Le vert de la cloche */
+    --accent-orange: #EF6C00; /* L'orange des silhouettes */
+    --light-gray: #F8F9FA;    /* Pour les fonds de cartes */
+    --text-dark: #333333;
+    --white: #FFFFFF;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
+    background-color: var(--white);
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-dark);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,3 +51,103 @@ button {
 button:hover {
     background-color: #b71c1c;
 }
+
+/* Le bouton Réserver inspiré du logo */
+.btn-reserve {
+    background: #2E7D32; /* Vert du logo pour l'action */
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+}
+
+.btn-reserve:hover {
+    background-color: #1b5e20;
+    transform: scale(1.05);
+}
+
+.menu-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 30px;
+    max-width: 500px;
+    margin: 20px auto;
+    border-bottom: 5px solid var(--primary-blue); /* Rappel du bleu du logo */
+    text-align: center;
+}
+
+.menu-header {
+    color: var(--primary-blue);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.plat-principal {
+    font-size: 1.8rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #005596, #2E7D32); /* Dégradé du logo */
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 10px 0;
+}
+
+/* Container principal du menu */
+.menu-container {
+    background-color: #ffffff;
+    padding: 40px;
+    text-align: center;
+}
+
+.menu-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+/* Style des cartes */
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 280px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Couleurs spécifiques par type de plat */
+.card-traditionnel { border-top: 5px solid #005596; }
+.card-pizza { border-top: 5px solid #EF6C00; }
+.card-vegetarien { border-top: 5px solid #2E7D32; }
+
+.title-traditionnel { color: #005596; }
+.title-pizza { color: #EF6C00; }
+.title-vegetarien { color: #2E7D32; }
+
+/* Boutons de réservation */
+.btn-res {
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.btn-blue { background-color: #005596; }
+.btn-orange { background-color: #EF6C00; }
+.btn-green { background-color: #2E7D32; }
