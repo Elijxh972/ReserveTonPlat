@@ -1,0 +1,42 @@
+<?php 
+// On inclut la connexion à la base de données pour vérifier que tout fonctionne
+include('../config/db.php'); 
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RéserveTonPlat - Bienvenue</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; padding: 50px; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); display: inline-block; }
+        h1 { color: #d32f2f; }
+        .btn { display: block; width: 200px; padding: 10px; margin: 10px auto; text-decoration: none; color: white; border-radius: 5px; }
+        .btn-login { background-color: #2e7d32; }
+        .btn-register { background-color: #1976d2; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🍴 RéserveTonPlat</h1>
+        <p>Bienvenue sur le système de réservation du CROUS Schœlcher.</p>
+        
+        <?php if($pdo): ?>
+            <p style="color: green; font-size: 0.8em;">✅ Serveur de base de données connecté</p>
+        <?php endif; ?>
+
+        <hr>
+
+        <a href="login.php" class="btn btn-login">Se connecter</a>
+        <a href="register.php" class="btn btn-register">S'inscrire</a>
+        
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
+            Accès réservé aux emails @univ-antilles.fr
+        </p>
+    </div>
+
+</body>
+</html>

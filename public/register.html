@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription - RéserveTonPlat</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Créer un compte</h1>
+        <p>Réservé aux étudiants de l'Université des Antilles</p>
+
+        <form action="../src/register_process.php" method="POST">
+            <input type="text" name="nom" placeholder="Nom complet" required>
+            
+            <input type="email" name="email" 
+                   placeholder="votre.nom@etu.univ-antilles.fr" required>
+            
+            <input type="password" name="password" 
+                   placeholder="Mot de passe (8 car. min)" 
+                   minlength="8" required>
+            
+            <button type="submit">S'inscrire</button>
+        </form>
+
+        <br>
+        <a href="index.php">Retour à l'accueil</a>
+    </div>
+</body>
+</html>
