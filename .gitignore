@@ -2,3 +2,4 @@
 .env
 *.log
 /public/assets/uploads/*
+config\api_keys.php
