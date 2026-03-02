@@ -4,7 +4,14 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Gestion dynamique du chemin pour le CSS et les liens
-$base = isset($basePath) ? $basePath : '';
+// Déterminer le base path en fonction de la structure des répertoires
+if (!isset($basePath)) {
+    $scriptPath = $_SERVER['SCRIPT_NAME'];
+    // Si le script est dans /public/ ou /public/includes/, le base path est vide
+    // Depuis ces emplacements, 'assets/css/style.css' fonctionne
+    $basePath = '';
+}
+$base = $basePath;
 $isLoggedIn = !empty($_SESSION['user_id']);
 $userRole = $_SESSION['user_role'] ?? 'etudiant';
 

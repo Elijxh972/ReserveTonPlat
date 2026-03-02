@@ -1,152 +1,281 @@
+/* ==========================================================================
+   VARIABLES GLOBALES (Thème Université des Antilles - Schœlcher)
+   ========================================================================== */
 :root {
     /* Couleurs principales */
-    --primary-blue: #005596;  /* Le bleu du logo */
-    --vibrant-green: #2E7D32; /* Le vert de la cloche */
-    --accent-orange: #EF6C00; /* L'orange des silhouettes */
-    --light-gray: #F8F9FA;    /* Pour les fonds de cartes */
-    --text-dark: #333333;
-    --white: #FFFFFF;
+    --primary-blue: #005596;  
+    --primary-blue-hover: #003d6b;
+    --vibrant-green: #2E7D32; 
+    --vibrant-green-hover: #1b5e20;
+    --accent-orange: #EF6C00; 
+    --accent-orange-hover: #e65100;
+    --danger-red: #d32f2f;
+    --danger-red-hover: #b71c1c;
+
+    /* Nuances de gris et fonds */
+    --bg-color: #F4F7F9;      /* Un fond légèrement plus bleuté/moderne que le gris pur */
+    --surface-white: #FFFFFF;
+    --border-color: #E2E8F0;
+    
+    /* Typographie */
+    --text-main: #2D3748;     /* Gris très foncé, plus doux à lire que le noir pur */
+    --text-muted: #718096;
+    
+    /* Effets modernes */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 10px 25px rgba(0, 85, 150, 0.15); /* Ombre bleutée pour le survol */
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-pill: 50px;
+    --transition-fast: 0.2s ease-in-out;
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    background-color: var(--light-gray);
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    color: var(--text-dark);
-    margin: 0;
+    background-color: var(--bg-color);
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-main);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    line-height: 1.6;
 }
 
+a {
+    text-decoration: none;
+    color: var(--primary-blue);
+    transition: all var(--transition-fast);
+}
+
+/* ==========================================================================
+   LAYOUT PRINCIPAL (S'applique à toutes les pages)
+   ========================================================================== */
 .site-header {
-    /* Barre fixe en haut sur toute la largeur */
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     z-index: 1000;
     background-color: var(--primary-blue);
-    color: var(--white);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    box-sizing: border-box;
+    color: var(--surface-white);
+    box-shadow: var(--shadow-md);
 }
 
 .site-header .header-inner {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
-    height: 70px;
-    padding: 0 20px;
+    height: 72px;
+    padding: 0 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .page-container {
-    max-width: 1100px;
-    margin: 100px auto 50px; /* espace sous le header fixe */
-    padding: 0 20px;
-    flex: 1; /* Force le contenu à prendre toute la place et pousse le footer en bas */
+    max-width: 1200px;
+    width: 100%;
+    margin: 100px auto 60px; /* Espace sous le header fixe */
+    padding: 0 24px;
+    flex: 1; /* Pousse le footer vers le bas */
 }
 
-.content-card {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-/* Logo dans le header */
+/* ==========================================================================
+   NAVIGATION & HEADER
+   ========================================================================== */
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo-img {
-    height: 60px;
-    width: auto;
-}
-
-.logo-text {
-    font-weight: 800;
-    font-size: 1.4rem;
-    letter-spacing: -0.5px;
-    text-transform: uppercase;
-}
-
-.main-nav {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-}
-
-.main-nav a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: opacity 0.2s ease, transform 0.15s ease;
-}
-
-.main-nav a:hover {
-    opacity: 0.85;
-    transform: translateY(-1px);
-}
-
-.user-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.user-info strong {
+.logo-img {
+    height: 48px; /* Légèrement réduit pour faire plus fin */
+    width: auto;
+}
+
+.logo-text {
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    color: var(--surface-white);
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.main-nav a {
+    color: rgba(255, 255, 255, 0.9);
     font-size: 0.95rem;
-    margin-right: 10px;
+    font-weight: 500;
 }
 
-.btn-logout {
-    background-color: #d32f2f;
-    color: #ffffff;
-    padding: 8px 16px;
-    border-radius: 20px;
-    text-decoration: none;
+.main-nav a:hover {
+    color: var(--surface-white);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   COMPOSANTS UI : BOUTONS
+   ========================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: center;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary { background-color: var(--primary-blue); color: var(--surface-white); }
+.btn-primary:hover { background-color: var(--primary-blue-hover); }
+
+.btn-success { background-color: var(--vibrant-green); color: var(--surface-white); }
+.btn-success:hover { background-color: var(--vibrant-green-hover); }
+
+.btn-warning { background-color: var(--accent-orange); color: var(--surface-white); }
+.btn-warning:hover { background-color: var(--accent-orange-hover); }
+
+.btn-danger { background-color: var(--danger-red); color: var(--surface-white); }
+.btn-danger:hover { background-color: var(--danger-red-hover); }
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-main);
+}
+.btn-outline:hover {
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+/* ==========================================================================
+   FORMULAIRES (Pour login.php, register.html, admin_edit_menu.php)
+   ========================================================================== */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
     font-size: 0.9rem;
-    font-weight: bold;
+    color: var(--text-main);
 }
 
-.btn-logout:hover {
-    background-color: #b71c1c;
-}
-
-.btn-scan-header {
-    background: #2E7D32;
-    color: #ffffff;
-    padding: 8px 14px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-.btn-scan-header:hover {
-    background: #1b5e20;
-}
-
-/* --- STYLE DU FOOTER --- */
-.site-footer {
-    background-color: #ffffff; /* Fond blanc pour détacher du gris clair */
-    border-top: 1px solid #e0e0e0;
-    padding: 40px 0 20px;
-    margin-top: 50px; /* Espace avec le contenu du dessus */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select {
     width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    background-color: #fafafa;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background-color: var(--surface-white);
+    box-shadow: 0 0 0 4px rgba(0, 85, 150, 0.1); /* Anneau de focus moderne */
+}
+
+/* ==========================================================================
+   CARTES & MENUS (Pour dashboard.php et index.html)
+   ========================================================================== */
+.content-card {
+    background: var(--surface-white);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.card {
+    background: var(--surface-white);
+    padding: 30px 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Uniformise la hauteur des cartes */
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Typographie spécifique aux cartes */
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+.plat-principal {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 15px 0;
+    flex-grow: 1; /* Pousse le bouton vers le bas */
+}
+
+/* Thèmes des cartes */
+.card-traditionnel { border-top: 6px solid var(--primary-blue); }
+.card-traditionnel h3 { color: var(--primary-blue); }
+
+.card-pizza { border-top: 6px solid var(--accent-orange); }
+.card-pizza h3 { color: var(--accent-orange); }
+
+.card-vegetarien { border-top: 6px solid var(--vibrant-green); }
+.card-vegetarien h3 { color: var(--vibrant-green); }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer {
+    background-color: var(--surface-white);
+    border-top: 1px solid var(--border-color);
+    padding: 40px 0 20px;
+    margin-top: auto; /* S'assure qu'il reste en bas */
 }
 
 .footer-inner {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
     text-align: center;
 }
 
@@ -154,205 +283,38 @@ body {
     font-weight: 800;
     font-size: 1.2rem;
     color: var(--primary-blue);
-    margin-bottom: 10px;
-    text-transform: uppercase;
+    margin-bottom: 12px;
 }
 
-.footer-desc {
-    color: #555;
-    font-size: 0.95rem;
-    margin-bottom: 5px;
-}
-
-.footer-legal {
-    color: var(--accent-orange); /* Rappel de la couleur d'alerte/info */
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-
+.footer-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 8px; }
 .footer-copy {
-    color: #999;
-    font-size: 0.8rem;
-    border-top: 1px solid #f0f0f0;
-    padding-top: 15px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 24px;
+    padding-top: 16px;
 }
 
-.badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background-color: var(--accent-orange);
-    color: var(--white);
-    font-size: 0.75rem;
-    font-weight: 600;
-}
+/* ==========================================================================
+   RESPONSIVE DESIGN (Mobiles & Tablettes)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .site-header .header-inner {
+        flex-direction: column;
+        height: auto;
+        padding: 15px 20px;
+        gap: 15px;
+    }
+    
+    .page-container {
+        margin-top: 130px; /* Ajusté car le header est plus grand sur mobile */
+    }
 
-input {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box; /* Important pour que le padding ne dépasse pas */
-}
-
-button {
-    background-color: #d32f2f; /* Rouge CROUS */
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-    font-weight: bold;
-}
-
-button:hover {
-    background-color: #b71c1c;
-}
-
-/* Le bouton Réserver inspiré du logo */
-.btn-reserve {
-    background: #2E7D32; /* Vert du logo pour l'action */
-    color: white;
-    border: none;
-    padding: 15px 40px;
-    border-radius: 50px;
-    font-weight: bold;
-    margin-top: 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
-}
-
-.btn-reserve:hover {
-    background-color: #1b5e20;
-    transform: scale(1.05);
-}
-
-.menu-card {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    padding: 30px;
-    max-width: 500px;
-    margin: 20px auto;
-    border-bottom: 5px solid var(--primary-blue); /* Rappel du bleu du logo */
-    text-align: center;
-}
-
-.menu-header {
-    color: var(--primary-blue);
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
-}
-
-.plat-principal {
-    font-size: 1.8rem;
-    font-weight: bold;
-    background: linear-gradient(90deg, #005596, #2E7D32); /* Dégradé du logo */
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 10px 0;
-}
-
-/* Container principal du menu */
-.menu-container {
-    background-color: #ffffff;
-    padding: 40px;
-    text-align: center;
-}
-
-.menu-grid {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 30px;
-}
-
-/* Style des cartes */
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    width: 280px;
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-/* Couleurs spécifiques par type de plat */
-.card-traditionnel { border-top: 5px solid #005596; }
-.card-pizza { border-top: 5px solid #EF6C00; }
-.card-vegetarien { border-top: 5px solid #2E7D32; }
-
-.title-traditionnel { color: #005596; }
-.title-pizza { color: #EF6C00; }
-.title-vegetarien { color: #2E7D32; }
-
-/* Boutons de réservation */
-.btn-res {
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 15px;
-}
-
-.btn-blue { background-color: #005596; }
-.btn-orange { background-color: #EF6C00; }
-.btn-green { background-color: #2E7D32; }
-
-.btn-decommander {
-    background-color: #d32f2f;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-.btn-decommander:hover {
-    background-color: #b71c1c;
-}
-
-.btn-edit-menu {
-    display: inline-block;
-    margin-left: 8px;
-    padding: 4px 10px;
-    border-radius: 12px;
-    background-color: #e0e0e0;
-    color: #333;
-    font-size: 0.8rem;
-    text-decoration: none;
-}
-
-.btn-edit-menu:hover {
-    background-color: #cccccc;
-}
-
-.btn-edit-cancel {
-    display: inline-block;
-    padding: 10px 18px;
-    border-radius: 20px;
-    background-color: #e0e0e0;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.btn-edit-cancel:hover {
-    background-color: #cccccc;
+    .main-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .content-card { padding: 1.5rem; }
 }

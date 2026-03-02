@@ -21,7 +21,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // 2. Bloquer les réservations après une certaine heure (heure de Martinique)
-$heureLimite = 12; // 12h00
+$heureLimite = 11; // 11h00
 $now = new DateTime('now', new DateTimeZone('America/Martinique'));
 if ((int)$now->format('G') >= $heureLimite) {
     header("Location: ../public/dashboard.php?res=late");
