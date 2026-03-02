@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<div style='border: 2px dashed #d32f2f; padding: 20px; background: #fff;'>";
         echo "   <h3>RéserveTonPlat - Confirmation</h3>";
         echo "   <p>Bonjour $nom, merci de valider ton compte en cliquant ici :</p>";
-        echo \"   <a href='../public/confirm.php?token=$token' style='background: #2e7d32; color: white; padding: 10px; text-decoration: none;'>ACTIVER MON COMPTE</a>\";
+        echo "   <a href='../public/confirm.php?token=$token' style='background: #2e7d32; color: white; padding: 10px; text-decoration: none;'>ACTIVER MON COMPTE</a>";
         echo "</div>";
 
     } catch (Exception $e) {

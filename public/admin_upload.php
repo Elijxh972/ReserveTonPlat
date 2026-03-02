@@ -56,8 +56,10 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
         <p>Prenez une photo propre du menu papier du CROUS.</p>
 
         <form action="../src/ia_scanner.php" method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
-            <input type="file" name="menu_image" accept="image/*" required>
-            <button type="submit" class="btn-scan">LANCER L'ANALYSE IA</button>
+            <label for="menu_image" style="display: block; text-align: left; margin-bottom: 5px; font-weight: bold;">📸 Photo du menu (semaine complète) :</label>
+            <input type="file" name="menu_image" id="menu_image" accept="image/*" required style="width: 100%; padding: 10px;">
+            
+            <button type="submit" class="btn-scan">SCANNER LA SEMAINE</button>
         </form>
 
         <div id="loader" class="loading">⌛ L'intelligence artificielle analyse le menu... Patientez...</div>

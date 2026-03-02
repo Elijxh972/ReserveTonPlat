@@ -18,6 +18,17 @@ if (isset($_SESSION['user_id'])) {
         <h1>Connexion</h1>
         <p>Accédez à votre espace étudiant</p>
 
+        <?php
+        if (isset($_GET['error'])) {
+            $error = $_GET['error'];
+            if ($error == 'mdp_incorrect') {
+                echo '<p style="color: red; font-weight: bold;">❌ Mot de passe incorrect</p>';
+            } elseif ($error == 'utilisateur_inconnu') {
+                echo '<p style="color: red; font-weight: bold;">❌ Utilisateur introuvable</p>';
+            }
+        }
+        ?>
+
         <form action="../src/login_process.php" method="POST">
             <input type="email" name="email" placeholder="votre.nom@etu.univ-antilles.fr" required>
             <input type="password" name="password" placeholder="Mot de passe" required>

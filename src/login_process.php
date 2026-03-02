@@ -18,9 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             die("Erreur : Votre compte n'est pas encore activé. Modifiez le 0 en 1 dans PHPMyAdmin.");
         }
 
-        // 3. Vérifier le mot de passe
-        // CHANGEMENT ICI : On compare directement les textes pour ton test
-        if ($password === $user['mot_de_passe']) { 
+        // 3. Vérifier le mot de passe (hashé avec password_hash)
+        if (password_verify($password, $user['mot_de_passe'])) { 
             
             // SUCCESS : On remplit la session
             $_SESSION['user_id'] = $user['id'];
