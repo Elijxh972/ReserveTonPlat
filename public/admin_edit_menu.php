@@ -45,6 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare('UPDATE menus SET date_menu = ?, plat_du_jour = ?, pizza_grillade = ?, vegetarien = ?, max_traditionnel = ?, max_pizza = ?, max_vegetarien = ? WHERE id = ?');
     $stmt->execute([$date_menu, $plat, $pizza, $vege, $maxTrad, $maxPizza, $maxVege, $id]);
 
+    // Une fois le menu mis à jour, on retourne à la liste des menus admin
+    header('Location: dashboard.php#admin-menus');
+    exit();
+}
+
 include 'includes/header.php';
 ?>
 

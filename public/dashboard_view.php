@@ -38,6 +38,26 @@
                     <input type="hidden" name="id_menu" value="<?= $menu['id'] ?>">
                     <button type="submit" class="btn-decommander">Annuler ma réservation</button>
                 </form>
+
+                <?php if ($deja_reserve['status'] !== 'used'): // si la réservation n'a pas encore été scannée ?>
+                    <?php
+                    // QR code : on génère un lien de vérification
+                    $base = sprintf(
+                        "%s://%s%s",
+                        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http',
+                        $_SERVER['HTTP_HOST'],
+                        dirname($_SERVER['REQUEST_URI'])
+                    );
+                    $verifyUrl = $base . '/verify.php?code=' . urlencode($deja_reserve['reservation_code']);
+                    ?>
+                    <div style="margin-top:20px; text-align:center;">
+                        <p>Montre ce QR code pour récupérer ton plat :</p>
+                        <img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=<?= urlencode($verifyUrl) ?>" alt="QR Code">
+                        <p><a href="<?= htmlspecialchars($verifyUrl) ?>" target="_blank">Lien de vérification</a></p>
+                    </div>
+                <?php else: ?>
+                    <p style="color:green; margin-top:20px;">✅ Ta réservation a déjà été vérifiée (plat récupéré).</p>
+                <?php endif; ?>
             <?php else: ?>
             <div class="menu-grid">
                 <div class="card card-traditionnel">
@@ -79,6 +99,11 @@
     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
         <div class="admin-section" style="border: 2px dashed var(--primary-blue); padding: 20px; border-radius: 15px; margin-top: 30px; background-color: #f0f7ff; text-align:left;">
             <h2>🛠️ Administration</h2>
+            <p style="margin: 10px 0 20px;">
+                <a href="admin_upload.php" class="btn-reserve" style="padding:8px 16px; font-size:0.9rem;">
+                    📷 Scanner le menu
+                </a>
+            </p>
             <div class="table-responsive">
                 <?php if (!empty($menusAdmin)): ?>
                     <h3 id="admin-menus" style="margin-bottom: 10px;">Menus enregistrés</h3>

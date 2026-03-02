@@ -2,6 +2,18 @@
 session_start();
 require_once('../config/db.php');
 
+// helper : génère un code unique pour une réservation (hexadécimal 16 caractères)
+function generateReservationCode(PDO $pdo)
+{
+    do {
+        $code = bin2hex(random_bytes(8));
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM reservations WHERE reservation_code = ?");
+        $stmt->execute([$code]);
+    } while ($stmt->fetchColumn() > 0);
+
+    return $code;
+}
+
 // 1. Vérification de la session (l'utilisateur doit être connecté)
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../public/login.php");
@@ -52,8 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_menu']) && isset($
 
     try {
         // 3. Insertion dans la table reservations avec le choix de plat
-        $stmt = $pdo->prepare("INSERT INTO reservations (id_utilisateur, id_menu, choix_plat) VALUES (?, ?, ?)");
-        $stmt->execute([$id_utilisateur, $id_menu, $choix]);
+        // génération du code et insertion
+        $reservationCode = generateReservationCode($pdo);
+        $stmt = $pdo->prepare("INSERT INTO reservations (id_utilisateur, id_menu, choix_plat, reservation_code) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$id_utilisateur, $id_menu, $choix, $reservationCode]);
 
         // Succès : retour au dashboard avec un message positif
         header("Location: ../public/dashboard.php?res=success");

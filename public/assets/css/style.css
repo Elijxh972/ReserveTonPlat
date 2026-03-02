@@ -13,9 +13,12 @@ body {
     font-family: 'Segoe UI', Roboto, sans-serif;
     color: var(--text-dark);
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-header {
+.site-header {
     /* Barre fixe en haut sur toute la largeur */
     position: fixed;
     top: 0;
@@ -28,7 +31,7 @@ header {
     box-sizing: border-box;
 }
 
-.main-header .header-content {
+.site-header .header-inner {
     max-width: 1100px;
     margin: 0 auto;
     height: 70px;
@@ -42,6 +45,7 @@ header {
     max-width: 1100px;
     margin: 100px auto 50px; /* espace sous le header fixe */
     padding: 0 20px;
+    flex: 1; /* Force le contenu à prendre toute la place et pousse le footer en bas */
 }
 
 .content-card {
@@ -66,9 +70,28 @@ header {
 
 .logo-text {
     font-weight: 800;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     letter-spacing: -0.5px;
     text-transform: uppercase;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.main-nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.main-nav a:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
 }
 
 .user-info {
@@ -111,13 +134,48 @@ header {
     background: #1b5e20;
 }
 
-.main-footer {
-    text-align: center;
-    padding: 15px 0 25px;
-    color: #777;
-    font-size: 0.9rem;
-    background-color: var(--white);
+/* --- STYLE DU FOOTER --- */
+.site-footer {
+    background-color: #ffffff; /* Fond blanc pour détacher du gris clair */
     border-top: 1px solid #e0e0e0;
+    padding: 40px 0 20px;
+    margin-top: 50px; /* Espace avec le contenu du dessus */
+    width: 100%;
+}
+
+.footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.footer-brand {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.footer-desc {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+.footer-legal {
+    color: var(--accent-orange); /* Rappel de la couleur d'alerte/info */
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.footer-copy {
+    color: #999;
+    font-size: 0.8rem;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
 }
 
 .badge {
