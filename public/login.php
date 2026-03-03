@@ -1,43 +1,39 @@
 <?php
-session_start();
-// Si déjà connecté, redirige vers dashboard
-if (isset($_SESSION['user_id'])) {
-    header('Location: dashboard.php');
-    exit();
-}
+$pageTitle = "Connexion";
+$basePath = ""; 
+include 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Connexion - RéserveTonPlat</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Connexion</h1>
-        <p>Accédez à votre espace étudiant</p>
 
-        <?php
-        if (isset($_GET['error'])) {
-            $error = $_GET['error'];
-            if ($error == 'mdp_incorrect') {
-                echo '<p style="color: red; font-weight: bold;">❌ Mot de passe incorrect</p>';
-            } elseif ($error == 'utilisateur_inconnu') {
-                echo '<p style="color: red; font-weight: bold;">❌ Utilisateur introuvable</p>';
-            }
-        }
-        ?>
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Connexion</h2>
+
+        <?php if (isset($_GET['res']) && $_GET['res'] == 'verified'): ?>
+            <div class="btn-success" style="padding: 10px; border-radius: 10px; margin-bottom: 20px;">
+                ✅ Compte validé ! Connectez-vous.
+            </div>
+        <?php endif; ?>
 
         <form action="../src/login_process.php" method="POST">
-            <input type="email" name="email" placeholder="votre.nom@etu.univ-antilles.fr" required>
-            <input type="password" name="password" placeholder="Mot de passe" required>
-            <button type="submit">Se connecter</button>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn-reserve" style="width: 100%;">
+                Se connecter
+            </button>
         </form>
 
-        <br>
-        <p>Pas encore inscrit ? <a href="register.html">Créer un compte</a></p>
-        <p><a href="index.html">Retour à l'accueil</a></p>
+        <p style="margin-top: 25px; font-size: 0.9rem; color: var(--text-muted);">
+            Nouveau ici ? <a href="register.php" style="font-weight: 800;">Créer un compte</a>
+        </p>
     </div>
-</body>
-</html>
+</div>
+
+<?php include 'includes/footer.php'; ?>

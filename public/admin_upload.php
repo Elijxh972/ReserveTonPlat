@@ -5,15 +5,12 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: dashboard.php");
     exit();
 }
+$pageTitle = 'Admin - Scanner le Menu';
+include 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Scanner le Menu | ReserveTonPlat</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
+
+    <div class="upload-container">
+        <style>
         :root {
             --primary-blue: #005596;
             --vibrant-green: #2E7D32;
@@ -46,11 +43,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
         }
 
         .loading { display: none; margin-top: 20px; color: var(--primary-blue); font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <div class="upload-container">
+        </style>
         <img src="assets/img/logo_RTP-removebg-preview.png" alt="Logo" class="logo-admin">
         <h2>Scanner le Menu</h2>
         <p>Prenez une photo propre du menu papier du CROUS.</p>

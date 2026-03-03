@@ -1,30 +1,34 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+// Sécurité : on empêche l'accès direct au fichier sans passer par le contrôleur
+if (!isset($isLoggedIn)) { 
+    header("Location: login.php"); 
+    exit(); 
+}
+include 'includes/header.php'; 
+?>
 
-<div class="content-card">
-    <h1>Bienvenue !</h1>
-    
-    <?php if (isset($_GET['res'])): ?>
-        <div class="alert">
-            <?php if ($_GET['res'] == 'success'): ?>
-                <p style="color: green;">✅ Portion réservée !</p>
-            <?php elseif ($_GET['res'] == 'already'): ?>
-                <p style="color: orange;">⚠️ Tu as déjà réservé pour ce menu.</p>
-            <?php elseif ($_GET['res'] == 'full'): ?>
-                <p style="color: red;">❌ Il n'y a plus de portions disponibles pour ce choix.</p>
-            <?php elseif ($_GET['res'] == 'cancelled'): ?>
-                <p style="color: green;">✅ Réservation annulée.</p>
-            <?php elseif ($_GET['res'] == 'late'): ?>
-                <p style="color: red;">⏰ Les réservations sont fermées pour aujourd'hui.</p>
-            <?php else: ?>
-                <p style="color: red;">❌ Une erreur est survenue. Réessaie.</p>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
+<div class="page-container">
+    <div class="content-card">
+        <h1>Bienvenue, <?= htmlspecialchars($_SESSION['user_nom'] ?? 'Étudiant') ?> !</h1>
+        
+        <?php if (isset($_GET['res'])): ?>
+            <div style="margin: 20px 0;">
+                <?php if ($_GET['res'] == 'success'): ?>
+                    <p class="btn-success" style="padding: 10px; border-radius: 10px;">✅ Portion réservée avec succès !</p>
+                <?php elseif ($_GET['res'] == 'already'): ?>
+                    <p class="btn-warning" style="padding: 10px; border-radius: 10px;">⚠️ Tu as déjà réservé pour ce menu.</p>
+                <?php elseif ($_GET['res'] == 'full'): ?>
+                    <p class="btn-danger" style="padding: 10px; border-radius: 10px;">❌ Plus de portions disponibles.</p>
+                <?php elseif ($_GET['res'] == 'cancelled'): ?>
+                    <p class="btn-success" style="padding: 10px; border-radius: 10px;">✅ Réservation annulée.</p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
 
-    <?php if (isset($menu) && $menu && (empty($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin')): ?>
-        <div class="menu-section">
-            <h2>🍴 Menu du Jour</h2>
-            <?php if (!empty($deja_reserve)): ?>
+        <?php if (!empty($deja_reserve)): ?>
+            <div class="auth-card" style="margin: 30px auto; max-width: 500px; border-top: 8px solid var(--vibrant-green); text-align: center;">
+                <h2 style="color: var(--vibrant-green);">Ma Réservation</h2>
+                
                 <?php
                 $choixLabel = [
                     'traditionnel' => 'Traditionnel',
@@ -32,126 +36,150 @@
                     'vegetarien' => 'Végétarien'
                 ];
                 $choix = $deja_reserve['choix_plat'] ?? 'traditionnel';
+                $token = $deja_reserve['qr_token'] ?? 'ERREUR';
+                
+                // Nouvelle API QR Code plus fiable
+                $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($token);
                 ?>
-                <p style="margin: 20px 0;">Tu as réservé <strong><?= htmlspecialchars($choixLabel[$choix] ?? $choix) ?></strong> pour ce menu.</p>
-                <form action="../src/decommander_process.php" method="POST" style="display:inline;">
-                    <input type="hidden" name="id_menu" value="<?= $menu['id'] ?>">
-                    <button type="submit" class="btn-decommander">Annuler ma réservation</button>
-                </form>
 
-                <?php if ($deja_reserve['status'] !== 'used'): // si la réservation n'a pas encore été scannée ?>
-                    <?php
-                    // QR code : on génère un lien de vérification
-                    $base = sprintf(
-                        "%s://%s%s",
-                        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http',
-                        $_SERVER['HTTP_HOST'],
-                        dirname($_SERVER['REQUEST_URI'])
-                    );
-                    $verifyUrl = $base . '/verify.php?code=' . urlencode($deja_reserve['reservation_code']);
-                    ?>
-                    <div style="margin-top:20px; text-align:center;">
-                        <p>Montre ce QR code pour récupérer ton plat :</p>
-                        <img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=<?= urlencode($verifyUrl) ?>" alt="QR Code">
-                        <p><a href="<?= htmlspecialchars($verifyUrl) ?>" target="_blank">Lien de vérification</a></p>
+                <p style="margin: 15px 0;">Menu choisi : <strong><?= htmlspecialchars($choixLabel[$choix] ?? $choix) ?></strong></p>
+
+                <?php if ($deja_reserve['est_scanne'] == 0): ?>
+                    <div style="background: #fff; padding: 20px; display: inline-block; border: 2px solid #eee; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <div id="qrcode" style="display: flex; justify-content: center; align-items: center; width: 250px; height: 250px; margin: 0 auto; background: #f9f9f9;"></div>
                     </div>
+                    
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+                    <script>
+                        new QRCode(document.getElementById("qrcode"), {
+                            text: <?= json_encode($token) ?>,
+                            width: 250,
+                            height: 250,
+                            colorDark: "#000000",
+                            colorLight: "#ffffff"
+                        });
+                    </script>
+                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: 15px;">Présente ce code au comptoir du CROUS.</p>
+
+                    <form action="../src/decommander_process.php" method="POST" style="margin-top: 25px;">
+                        <input type="hidden" name="id_menu" value="<?= $menu['id'] ?? '' ?>">
+                        <button type="button" class="btn-logout" style="width: 100%;" onclick="openCancelModal()">
+                            Annuler ma portion
+                        </button>
+                    </form>
                 <?php else: ?>
-                    <p style="color:green; margin-top:20px;">✅ Ta réservation a déjà été vérifiée (plat récupéré).</p>
+                    <div class="btn-success" style="padding: 15px; border-radius: 10px; margin-top: 10px;">
+                        🍽️ Plat déjà récupéré. Bon appétit !
+                    </div>
                 <?php endif; ?>
-            <?php else: ?>
-            <div class="menu-grid">
-                <div class="card card-traditionnel">
-                    <h3 class="title-traditionnel">Traditionnel</h3>
-                    <p><?= htmlspecialchars($menu['plat_du_jour']) ?></p>
-                    <form action="../src/reserve_process.php" method="POST">
-                        <input type="hidden" name="id_menu" value="<?= $menu['id'] ?>">
-                        <input type="hidden" name="choix" value="traditionnel">
-                        <button type="submit" class="btn-res btn-blue">Choisir</button>
-                    </form>
-                </div>
+            </div>
 
-                <div class="card card-pizza">
-                    <h3 class="title-pizza">Pizza / Grillade</h3>
-                    <p><?= htmlspecialchars($menu['pizza_grillade']) ?></p>
-                    <form action="../src/reserve_process.php" method="POST">
-                        <input type="hidden" name="id_menu" value="<?= $menu['id'] ?>">
-                        <input type="hidden" name="choix" value="pizza">
-                        <button type="submit" class="btn-res btn-orange">Choisir</button>
-                    </form>
-                </div>
+        <?php elseif (isset($menu) && $menu && $reservations_open): ?>
+            <div class="menu-section">
+                <h2 style="margin-bottom: 25px;">Menu du Jour (<?= date('d/m/Y') ?>)</h2>
+                <div class="menu-grid">
+                    <div class="card card-traditionnel">
+                        <h3>Traditionnel</h3>
+                        <p class="plat-principal"><?= htmlspecialchars($menu['plat_du_jour']) ?></p>
+                        <form action="../src/reserve_process.php" method="POST">
+                            <input type="hidden" name="id_menu" value="<?= $menu['id'] ?>">
+                            <input type="hidden" name="choix" value="traditionnel">
+                            <button type="submit" class="btn-res btn-blue">Réserver ce plat</button>
+                        </form>
+                    </div>
 
-                <div class="card card-vegetarien">
-                    <h3 class="title-vegetarien">Végétarien</h3>
-                    <p><?= htmlspecialchars($menu['vegetarien']) ?></p>
-                    <form action="../src/reserve_process.php" method="POST">
-                        <input type="hidden" name="id_menu" value="<?= $menu['id'] ?>">
-                        <input type="hidden" name="choix" value="vegetarien">
-                        <button type="submit" class="btn-res btn-green">Choisir</button>
-                    </form>
+                    <div class="card card-pizza">
+                        <h3>Pizza / Grillade</h3>
+                        <p class="plat-principal"><?= htmlspecialchars($menu['pizza_grillade']) ?></p>
+                        <form action="../src/reserve_process.php" method="POST">
+                            <input type="hidden" name="id_menu" value="<?= $menu['id'] ?>">
+                            <input type="hidden" name="choix" value="pizza">
+                            <button type="submit" class="btn-res btn-orange">Réserver ce plat</button>
+                        </form>
+                    </div>
+
+                    <div class="card card-vegetarien">
+                        <h3>Végétarien</h3>
+                        <p class="plat-principal"><?= htmlspecialchars($menu['vegetarien']) ?></p>
+                        <form action="../src/reserve_process.php" method="POST">
+                            <input type="hidden" name="id_menu" value="<?= $menu['id'] ?>">
+                            <input type="hidden" name="choix" value="vegetarien">
+                            <button type="submit" class="btn-res btn-green">Réserver ce plat</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <?php endif; ?>
-        </div>
-    <?php else: ?>
-        <p>Le menu n'est pas encore disponible.</p>
-    <?php endif; ?>
+        <?php elseif ($reservations_not_started): ?>
+            <div style="padding: 40px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #4a90e2, #357abd); padding: 40px; border-radius: 15px; color: white;">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">⏰ À bientôt !</h2>
+                    <p style="margin: 0; font-size: 1.1rem;">Les réservations commencent à <strong>9h00</strong></p>
+                    <p style="margin: 10px 0 0 0; font-size: 0.95rem; opacity: 0.9;">Reviens à partir de 9h pour réserver ta portion.</p>
+                </div>
+            </div>
+        <?php elseif ($reservations_closed): ?>
+            <div style="padding: 40px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f); padding: 40px; border-radius: 15px; color: white;">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🔒 Réservations Fermées</h2>
+                    <p style="margin: 0; font-size: 1.1rem;">Les réservations pour aujourd'hui sont terminées.</p>
+                    <p style="margin: 10px 0 0 0; font-size: 0.95rem; opacity: 0.9;">Le créneau de réservation était de 9h00 à 11h00.</p>
+                </div>
+            </div>
+        <?php else: ?>
+            <div style="padding: 40px; color: var(--text-muted);">
+                <p>Le menu n'est pas encore publié pour aujourd'hui. Repasse d'ici quelques minutes !</p>
+            </div>
+        <?php endif; ?>
 
-    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-        <div class="admin-section" style="border: 2px dashed var(--primary-blue); padding: 20px; border-radius: 15px; margin-top: 30px; background-color: #f0f7ff; text-align:left;">
-            <h2>🛠️ Administration</h2>
-            <p style="margin: 10px 0 20px;">
-                <a href="admin_upload.php" class="btn-reserve" style="padding:8px 16px; font-size:0.9rem;">
-                    📷 Scanner le menu
-                </a>
-            </p>
-            <div class="table-responsive">
-                <?php if (!empty($menusAdmin)): ?>
-                    <h3 id="admin-menus" style="margin-bottom: 10px;">Menus enregistrés</h3>
-                    <table style="width:100%; border-collapse: collapse; font-size: 0.9rem;">
+        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+            <div class="admin-section" style="margin-top: 50px; padding-top: 30px; border-top: 2px dashed var(--border-color);">
+                <h2 style="text-align: left; color: var(--primary-blue);">Espace Gestionnaire</h2>
+                <div style="display: flex; gap: 15px; margin: 20px 0;">
+                    <a href="admin_scan.php" class="btn-scan-header">Valider un QR Code</a>
+                    <a href="admin_upload.php" class="btn-outline btn">Ajouter un menu</a>
+                </div>
+
+                <div class="table-responsive" style="overflow-x: auto; background: #fff; padding: 15px; border-radius: 10px; box-shadow: var(--shadow-sm);">
+                    <table style="width: 100%; text-align: left; border-collapse: collapse;">
                         <thead>
-                            <tr>
-                                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Date</th>
-                                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Plat du jour</th>
-                                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Pizza / Grillade</th>
-                                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Végétarien</th>
-                                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Affichage</th>
-                                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Action</th>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 10px;">Date</th>
+                                <th style="padding: 10px;">Plats</th>
+                                <th style="padding: 10px;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($menusAdmin as $m): ?>
-                                <tr>
-                                    <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><?= htmlspecialchars($m['date_menu']) ?></td>
-                                    <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><?= htmlspecialchars($m['plat_du_jour']) ?></td>
-                                    <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><?= htmlspecialchars($m['pizza_grillade']) ?></td>
-                                    <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><?= htmlspecialchars($m['vegetarien']) ?></td>
-                                    <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
-                                        <?php if (!empty($m['est_visible'])): ?>
-                                            <span style="color:green; font-weight:bold;">Affiché</span>
-                                        <?php else: ?>
-                                            <span style="color:#999;">Caché</span>
-                                        <?php endif; ?>
+                            <?php if (!empty($menusAdmin)): ?>
+                                <?php foreach ($menusAdmin as $m): ?>
+                                <tr style="border-bottom: 1px solid #eee;">
+                                    <td style="padding: 10px;"><?= htmlspecialchars($m['date_menu']) ?></td>
+                                    <td style="padding: 10px; font-size: 0.85rem; color: #666;">
+                                        T: <?= htmlspecialchars(substr($m['plat_du_jour'], 0, 20)) ?>...
                                     </td>
-                                    <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
-                                        <form action="../src/admin_toggle_menu.php" method="POST" style="display:inline;">
-                                            <input type="hidden" name="id_menu" value="<?= (int)$m['id'] ?>">
-                                            <input type="hidden" name="est_visible" value="<?= !empty($m['est_visible']) ? 0 : 1 ?>">
-                                            <button type="submit" class="btn-reserve" style="padding:6px 12px; font-size:0.85rem;">
-                                                <?= !empty($m['est_visible']) ? 'Cacher' : 'Afficher' ?>
-                                            </button>
-                                        </form>
-                                        <a href="admin_edit_menu.php?id=<?= (int)$m['id'] ?>" class="btn-edit-menu">Modifier</a>
+                                    <td style="padding: 10px;">
+                                        <a href="admin_edit_menu.php?id=<?= $m['id'] ?>" style="color: var(--primary-blue); font-weight: bold;">Modifier</a>
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
-                <?php else: ?>
-                    <p style="margin-top:15px; font-size:0.9rem; color:#555;">Aucun menu enregistré pour le moment.</p>
-                <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Modal Confirmation Annulation -->
+        <div id="cancelModal" class="modal-overlay" style="display: none;">
+            <div class="modal-box">
+                <h3>Confirmer l'annulation</h3>
+                <p>Es-tu sûr de vouloir annuler ta réservation ?</p>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeCancelModal()">Non, garder</button>
+                    <button class="btn-danger" onclick="confirmCancel()">Oui, annuler</button>
+                </div>
             </div>
         </div>
-    <?php endif; ?>
+    </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
